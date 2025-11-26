@@ -3,3 +3,4 @@ from app.models.user import User
 from app.models.wallet import Wallet
 from app.models.listing import Listing
 from app.models.order import Order
+from app.models.transaction import Transaction

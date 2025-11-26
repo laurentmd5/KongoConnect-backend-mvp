@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, String, Float, Boolean, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from app.models.base_class import Base
 
@@ -7,18 +7,19 @@ class Listing(Base):
     
     title = Column(String, nullable=False)
     description = Column(String, nullable=True)
+    price = Column(Integer, nullable=False) # Prix de base ou horaire
+    price_unit = Column(String, default="Prestation") # "Heure", "Jour", "Forfait"
     
-    # ✅ CORRECTIF : Integer pour le prix
-    price = Column(Integer, nullable=False) 
-    price_unit = Column(String, default="Unité")
-    type = Column(String, nullable=False) # SERVICE / PRODUCT
-    category = Column(String, default="all")
+    # MVP 1.0 : On se concentre sur les SERVICES.
+    # Type est forcé à "SERVICE" par défaut, mais on garde le champ pour la compatibilité future.
+    type = Column(String, default="SERVICE") 
+    category = Column(String, default="DIVERS") # PLOMBERIE, COIFFURE, MENAGE...
     
+    # Géolocalisation (Vital pour la recherche locale)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     
-    is_flash_offer = Column(Boolean, default=False)
-    expires_at = Column(DateTime, nullable=True)
-
-    partner = relationship("User", back_populates="listings")
+    # Disponibilité (Le "On/Off" de l'artisan)
+    is_available = Column(Boolean, default=True)
     
+    partner = relationship("User", back_populates="listings")
